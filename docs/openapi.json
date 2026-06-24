@@ -1,0 +1,364 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Travel Planner Agent API",
+    "version": "0.2.0",
+    "description": "Free-first API for generating travel plans, storing them by plan_id, and exporting PDF reports."
+  },
+  "servers": [
+    {
+      "url": "http://127.0.0.1:8001"
+    }
+  ],
+  "paths": {
+    "/health": {
+      "get": {
+        "summary": "Health check",
+        "responses": {
+          "200": {
+            "description": "API is running",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": "ok"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/plan-trip": {
+      "post": {
+        "summary": "Generate and store a travel plan",
+        "description": "Returns a compact response with plan_id and report URLs. Add include_full=true to the request body if you want the full plan inline.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TripRequest"
+              },
+              "example": {
+                "departure_city": "New York",
+                "destination": "Lisbon",
+                "start_date": "2026-09-10",
+                "end_date": "2026-09-16",
+                "travelers": 2,
+                "budget": 2500,
+                "currency": "USD",
+                "interests": ["beaches", "photography", "local markets"],
+                "trip_style": "budget",
+                "pace": "balanced",
+                "constraints": ["no car rental"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Compact travel plan response or clarification response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/CompactPlanResponse"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ClarificationResponse"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/plans/{plan_id}": {
+      "get": {
+        "summary": "Get the full stored plan JSON",
+        "parameters": [
+          {
+            "name": "plan_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "plan_abc123def456"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Full stored travel plan",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Plan not found"
+          }
+        }
+      }
+    },
+    "/plans/{plan_id}/pdf": {
+      "get": {
+        "summary": "Open or download the stored PDF report",
+        "parameters": [
+          {
+            "name": "plan_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "plan_abc123def456"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "PDF report",
+            "content": {
+              "application/pdf": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Plan not found"
+          }
+        }
+      }
+    },
+    "/export/pdf": {
+      "post": {
+        "summary": "Export a PDF from a plan_id, a full plan, or a trip request",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PdfExportRequest"
+              },
+              "example": {
+                "plan_id": "plan_abc123def456"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PDF export result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PdfExportResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "TripRequest": {
+        "type": "object",
+        "required": [
+          "departure_city",
+          "destination",
+          "start_date",
+          "end_date",
+          "travelers",
+          "budget",
+          "currency",
+          "interests",
+          "trip_style",
+          "pace"
+        ],
+        "properties": {
+          "departure_city": {
+            "type": "string",
+            "example": "New York"
+          },
+          "destination": {
+            "type": "string",
+            "example": "Lisbon"
+          },
+          "start_date": {
+            "type": "string",
+            "format": "date",
+            "example": "2026-09-10"
+          },
+          "end_date": {
+            "type": "string",
+            "format": "date",
+            "example": "2026-09-16"
+          },
+          "travelers": {
+            "type": "integer",
+            "example": 2
+          },
+          "budget": {
+            "type": "number",
+            "example": 2500
+          },
+          "currency": {
+            "type": "string",
+            "example": "USD"
+          },
+          "interests": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": ["beaches", "photography", "local markets"]
+          },
+          "trip_style": {
+            "type": "string",
+            "enum": ["budget", "solo_backpacking", "family"],
+            "example": "budget"
+          },
+          "pace": {
+            "type": "string",
+            "enum": ["relaxed", "balanced", "packed"],
+            "example": "balanced"
+          },
+          "constraints": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "include_full": {
+            "type": "boolean",
+            "default": false,
+            "description": "When true, includes the full plan inline. Default response is compact."
+          },
+          "use_live_data": {
+            "type": "boolean",
+            "default": true
+          }
+        }
+      },
+      "CompactPlanResponse": {
+        "type": "object",
+        "required": ["status", "plan_id", "summary", "ai_response", "budget", "report"],
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "complete"
+          },
+          "plan_id": {
+            "type": "string",
+            "example": "plan_abc123def456"
+          },
+          "summary": {
+            "type": "object"
+          },
+          "ai_response": {
+            "type": "string"
+          },
+          "budget": {
+            "type": "object"
+          },
+          "validation": {
+            "type": "object"
+          },
+          "report": {
+            "type": "object",
+            "properties": {
+              "json_path": {
+                "type": "string"
+              },
+              "pdf_path": {
+                "type": "string"
+              },
+              "json_url": {
+                "type": "string",
+                "example": "/plans/plan_abc123def456"
+              },
+              "pdf_url": {
+                "type": "string",
+                "example": "/plans/plan_abc123def456/pdf"
+              }
+            }
+          },
+          "tool_availability": {
+            "type": "object"
+          },
+          "full_plan": {
+            "type": "object",
+            "description": "Only present when include_full=true."
+          }
+        }
+      },
+      "ClarificationResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "needs_clarification"
+          },
+          "missing_fields": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "questions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "PdfExportRequest": {
+        "type": "object",
+        "properties": {
+          "plan_id": {
+            "type": "string",
+            "example": "plan_abc123def456"
+          },
+          "plan": {
+            "type": "object"
+          },
+          "output_path": {
+            "type": "string",
+            "example": "outputs/custom_report.pdf"
+          }
+        },
+        "additionalProperties": true
+      },
+      "PdfExportResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "complete"
+          },
+          "plan_id": {
+            "type": "string"
+          },
+          "pdf_path": {
+            "type": "string"
+          },
+          "pdf_url": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,50 @@
+<svg width="960" height="420" viewBox="0 0 960 420" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Travel Planner Agent API architecture</title>
+  <desc id="desc">Diagram showing client requests flowing through the API, planning workflow, free data providers, stored plans, and PDF reports.</desc>
+  <rect width="960" height="420" rx="24" fill="#0F172A"/>
+  <rect x="32" y="32" width="896" height="356" rx="18" fill="#111827" stroke="#334155"/>
+  <text x="64" y="78" fill="#F8FAFC" font-family="Segoe UI, Arial, sans-serif" font-size="30" font-weight="700">Travel Planner Agent</text>
+  <text x="64" y="108" fill="#CBD5E1" font-family="Segoe UI, Arial, sans-serif" font-size="15">Free-first planning API with compact responses, stored reports, and Swagger testing.</text>
+
+  <g font-family="Segoe UI, Arial, sans-serif">
+    <rect x="66" y="170" width="150" height="82" rx="14" fill="#1E293B" stroke="#38BDF8"/>
+    <text x="141" y="202" text-anchor="middle" fill="#F8FAFC" font-size="17" font-weight="600">API Client</text>
+    <text x="141" y="228" text-anchor="middle" fill="#94A3B8" font-size="13">Swagger / HTTP</text>
+
+    <rect x="286" y="158" width="160" height="106" rx="14" fill="#172554" stroke="#60A5FA"/>
+    <text x="366" y="194" text-anchor="middle" fill="#F8FAFC" font-size="17" font-weight="600">HTTP API</text>
+    <text x="366" y="219" text-anchor="middle" fill="#BFDBFE" font-size="13">/plan-trip</text>
+    <text x="366" y="239" text-anchor="middle" fill="#BFDBFE" font-size="13">/plans/{id}/pdf</text>
+
+    <rect x="516" y="118" width="174" height="82" rx="14" fill="#064E3B" stroke="#34D399"/>
+    <text x="603" y="150" text-anchor="middle" fill="#F8FAFC" font-size="17" font-weight="600">Planner</text>
+    <text x="603" y="176" text-anchor="middle" fill="#A7F3D0" font-size="13">itinerary + budget</text>
+
+    <rect x="516" y="236" width="174" height="82" rx="14" fill="#422006" stroke="#FBBF24"/>
+    <text x="603" y="268" text-anchor="middle" fill="#F8FAFC" font-size="17" font-weight="600">Free Providers</text>
+    <text x="603" y="294" text-anchor="middle" fill="#FDE68A" font-size="13">Open-Meteo / OSM</text>
+
+    <rect x="760" y="118" width="136" height="82" rx="14" fill="#3B0764" stroke="#C084FC"/>
+    <text x="828" y="150" text-anchor="middle" fill="#F8FAFC" font-size="17" font-weight="600">Stored Plan</text>
+    <text x="828" y="176" text-anchor="middle" fill="#E9D5FF" font-size="13">plan_id JSON</text>
+
+    <rect x="760" y="236" width="136" height="82" rx="14" fill="#7F1D1D" stroke="#FCA5A5"/>
+    <text x="828" y="268" text-anchor="middle" fill="#F8FAFC" font-size="17" font-weight="600">PDF Report</text>
+    <text x="828" y="294" text-anchor="middle" fill="#FECACA" font-size="13">download link</text>
+  </g>
+
+  <g stroke="#64748B" stroke-width="3" stroke-linecap="round">
+    <path d="M216 211H286"/>
+    <path d="M446 211C478 211 486 159 516 159"/>
+    <path d="M446 211C478 211 486 277 516 277"/>
+    <path d="M690 159H760"/>
+    <path d="M690 277H760"/>
+  </g>
+  <g fill="#94A3B8">
+    <path d="M281 204L293 211L281 218V204Z"/>
+    <path d="M511 152L523 159L511 166V152Z"/>
+    <path d="M511 270L523 277L511 284V270Z"/>
+    <path d="M755 152L767 159L755 166V152Z"/>
+    <path d="M755 270L767 277L755 284V270Z"/>
+  </g>
+</svg>

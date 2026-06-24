@@ -1,0 +1,13 @@
+{
+  "departure_city": "New York",
+  "destination": "Lisbon",
+  "start_date": "2026-09-10",
+  "end_date": "2026-09-16",
+  "travelers": 2,
+  "budget": 2500,
+  "currency": "USD",
+  "interests": ["food", "history", "walkable neighborhoods"],
+  "trip_style": "budget",
+  "pace": "balanced",
+  "constraints": ["no car rental"]
+}
