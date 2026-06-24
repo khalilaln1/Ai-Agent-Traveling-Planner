@@ -19,8 +19,8 @@ for the user, stores the full plan by ID, and creates a downloadable PDF report.
 ## 🚀 Quick Start
 
 ```powershell
-git clone https://github.com/khalilaln1/aiagent.git
-cd aiagent
+git clone https://github.com/khalilaln1/Ai-Agent-Traveling-Planner.git
+cd Ai-Agent-Traveling-Planner
 copy .env.example .env
 python -m travel_agent.api --host 127.0.0.1 --port 8001
 ```
